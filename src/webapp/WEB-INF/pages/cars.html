@@ -1,12 +1,22 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<th:block th:each="msg : ${messages}">
-    <h1 th:text="${msg}"></h1>
-</th:block>
+    <table border="1" style="width:300px">
+        <tr>
+            <td>Model</td>
+            <td>Series</td>
+        </tr>
+        <th:block th:each="car : ${cars}">
+            <tr>
+                <td><span th:text="${car.model}"> Model </span></td>
+                <td><span th:text="${car.series}"> Series </span></td>
+            </tr>
+        </th:block>
+    </table>
 </body>
 </html>

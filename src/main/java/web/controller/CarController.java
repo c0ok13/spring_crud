@@ -28,7 +28,7 @@ public class CarController {
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-		model.addAttribute("messages", cars);
+		model.addAttribute("cars", cars);
 		System.out.println(cars.toString());
 		return "cars";
 	}
