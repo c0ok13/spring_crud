@@ -1,6 +1,5 @@
 package web.repository;
 
-import org.springframework.transaction.annotation.Transactional;
 import web.entity.User;
 
 import java.util.List;

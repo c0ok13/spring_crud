@@ -5,9 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import web.entity.User;
 import web.repository.UserRepository;
-import web.repository.UserRepositoryImp;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 @Service
@@ -26,6 +24,22 @@ public class UserServiceImp implements UserService {
    @Override
    public List<User> listUsers() {
       return this.userRepository.listUsers();
+   }
+
+   @Override
+   public User userById(long id) {
+      return this.userRepository.userById(id);
+   }
+
+   @Override
+   public void updateUser(long id, User user) {
+      user.setId(id);
+      this.userRepository.updateUser(user);
+   }
+
+   @Override
+   public void deleteUser(long id) {
+      this.userRepository.deleteUser(id);
    }
 
 
