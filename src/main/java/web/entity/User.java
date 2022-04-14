@@ -25,6 +25,9 @@ public class User {
         this.age = age;
     }
 
+    public User() {
+    }
+
     public long getId() {
         return id;
     }
@@ -55,8 +58,5 @@ public class User {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public User() {
     }
 }

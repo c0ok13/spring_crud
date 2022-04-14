@@ -9,7 +9,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
-public class UserRepositoryImp implements UserRepository{
+public class UserRepositoryImp implements UserRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -24,7 +24,8 @@ public class UserRepositoryImp implements UserRepository{
     @Transactional(readOnly = true)
     @Override
     public List<User> listUsers() {
-        return entityManager.createQuery("select u from User u", User.class).getResultList();
+        return entityManager.createQuery("select u from User u", User.class)
+                .getResultList();
     }
 
     @Transactional(readOnly = true)

@@ -25,79 +25,60 @@ import java.util.Properties;
 @ComponentScan(value = "web")
 public class DatabaseConfig {
 
-   @Resource
-   private Environment env;
+    @Resource
+    private Environment env;
 
-   @Bean
-   public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(){
-      LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-      em.setDataSource(getDataSource());
-      em.setPackagesToScan(env.getProperty("db.entity.package"));
-      em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-      em.setJpaProperties(Objects.requireNonNull(getHibernateProperties()));
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(getDataSource());
+        em.setPackagesToScan(env.getProperty("db.entity.package"));
+        em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        em.setJpaProperties(Objects.requireNonNull(getHibernateProperties()));
 
-      return em;
-   }
+        return em;
+    }
 
-   @Bean
-   public DataSource getDataSource() {
-      BasicDataSource dataSource = new BasicDataSource();
+    @Bean
+    public DataSource getDataSource() {
+        BasicDataSource dataSource = new BasicDataSource();
 
-      dataSource.setDriverClassName(env.getProperty("db.driver"));
-      dataSource.setUrl(env.getProperty("db.url"));
-      dataSource.setUsername(env.getProperty("db.username"));
-      dataSource.setPassword(env.getProperty("db.password"));
+        dataSource.setDriverClassName(env.getProperty("db.driver"));
+        dataSource.setUrl(env.getProperty("db.url"));
+        dataSource.setUsername(env.getProperty("db.username"));
+        dataSource.setPassword(env.getProperty("db.password"));
 
-      dataSource.setInitialSize(Integer.parseInt(Objects.requireNonNull(env.getProperty("db.initalSize"))));
-      dataSource.setMinIdle(Integer.parseInt(Objects.requireNonNull(env.getProperty("db.minIdle"))));
-      dataSource.setMaxIdle(Integer.parseInt(Objects.requireNonNull(env.getProperty("db.maxIdle"))));
-      dataSource.setTimeBetweenEvictionRunsMillis(Long.parseLong(Objects.requireNonNull(env.getProperty("db.timeBetweenEvictionRunsMillis"))));
-      dataSource.setMinEvictableIdleTimeMillis(Long.parseLong(Objects.requireNonNull(env.getProperty("db.minEvictableIdleTimeMillis"))));
-      dataSource.setTestOnBorrow(Boolean.parseBoolean(env.getProperty("db.testonBorrow")));
-      dataSource.setValidationQuery(env.getProperty("db.validationQuery"));
+        dataSource.setInitialSize(Integer.parseInt(Objects.requireNonNull(env.getProperty("db.initalSize"))));
+        dataSource.setMinIdle(Integer.parseInt(Objects.requireNonNull(env.getProperty("db.minIdle"))));
+        dataSource.setMaxIdle(Integer.parseInt(Objects.requireNonNull(env.getProperty("db.maxIdle"))));
+        dataSource.setTimeBetweenEvictionRunsMillis(Long.parseLong(Objects.requireNonNull(env.getProperty("db.timeBetweenEvictionRunsMillis"))));
+        dataSource.setMinEvictableIdleTimeMillis(Long.parseLong(Objects.requireNonNull(env.getProperty("db.minEvictableIdleTimeMillis"))));
+        dataSource.setTestOnBorrow(Boolean.parseBoolean(env.getProperty("db.testonBorrow")));
+        dataSource.setValidationQuery(env.getProperty("db.validationQuery"));
 
-      return dataSource;
-   }
+        return dataSource;
+    }
 
 
+    @Bean
+    public PlatformTransactionManager platformTransactionManager() {
+        JpaTransactionManager manager = new JpaTransactionManager();
+        manager.setEntityManagerFactory(entityManagerFactoryBean().getObject());
 
-   @Bean
-   public PlatformTransactionManager platformTransactionManager() {
-      JpaTransactionManager manager = new JpaTransactionManager();
-      manager.setEntityManagerFactory(entityManagerFactoryBean().getObject());
+        return manager;
+    }
 
-      return manager;
-   }
-   private Properties getHibernateProperties() {
-      try {
-         Properties properties = new Properties();
-         InputStream is = getClass().getClassLoader().getResourceAsStream("hibernate.properties");
-         properties.load(is);
-         return properties;
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
-      return null;
-   }
-
-//   @Bean
-//   public LocalSessionFactoryBean getSessionFactory() {
-//      LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
-//      factoryBean.setDataSource(getDataSource());
-//
-//      Properties props=new Properties();
-//      props.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
-//      props.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
-//
-//      factoryBean.setHibernateProperties(props);
-//      factoryBean.setAnnotatedClasses(User.class, Car.class);
-//      return factoryBean;
-//   }
-//
-//   @Bean
-//   public HibernateTransactionManager getTransactionManager() {
-//      HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-//      transactionManager.setSessionFactory(getSessionFactory().getObject());
-//      return transactionManager;
-//   }
+    private Properties getHibernateProperties() {
+        try {
+            Properties properties = new Properties();
+            InputStream is = getClass()
+                    .getClassLoader()
+                    .getResourceAsStream("hibernate.properties");
+            properties.load(is);
+            return properties;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
